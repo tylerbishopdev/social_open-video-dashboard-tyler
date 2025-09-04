@@ -6,7 +6,21 @@ module.exports = {
     './app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
-    extend: {},
+    extend: {
+      container: {
+        center: true,
+        padding: '3rem',
+        screens: {
+          '2xl': '1400px',
+        },
+      },
+      fontFamily: {
+        sans: ['Inter', 'sans-serif'],
+      },
+    },
   },
-  plugins: [],
+  plugins: [
+    require('tw-animate-css'),
+    require('tailwindcss/postcss'),
+  ],
 }

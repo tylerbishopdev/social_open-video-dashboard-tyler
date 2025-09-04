@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
+import { cn } from '@/lib/utils'
 import './globals.css'
+
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -16,7 +18,15 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <head>
+        <title>Open Video Dashboard - Daily Discussion Tracker</title>
+        <meta name="description" content="Track daily discussions about Open Video and creator economy topics" />
+      </head>
+      <body className={inter.className}>
+        <div className="min-h-screen bg-gray-50">
+          {children}
+        </div>
+      </body>
     </html>
   )
 }

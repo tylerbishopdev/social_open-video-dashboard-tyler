@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react';
 import { format } from 'date-fns';
 import { RefreshCw, Calendar, Filter, Download, Search, Clock, AlertCircle } from 'lucide-react';
 import { DailyReport, Discussion } from '@/types';
+import { cn } from '@/lib/utils';
+import '../app/globals.css';
 import { getReports, saveReport, getTodaysReport } from '@/lib/storage';
 import DiscussionCard from './DiscussionCard';
 
@@ -20,7 +22,7 @@ export default function Dashboard() {
     // Load reports from localStorage
     const storedReports = getReports();
     setReports(storedReports);
-    
+
     // Select today's report by default, or the most recent one
     const todaysReport = getTodaysReport();
     if (todaysReport) {
@@ -28,7 +30,7 @@ export default function Dashboard() {
     } else if (storedReports.length > 0) {
       setSelectedReport(storedReports[0]);
     }
-    
+
     // Check if we need to fetch today's data
     if (!todaysReport) {
       fetchDailyData();
@@ -38,7 +40,7 @@ export default function Dashboard() {
   const fetchDailyData = async () => {
     setLoading(true);
     setError(null);
-    
+
     try {
       const response = await fetch('/api/perplexity', {
         method: 'POST',
@@ -47,16 +49,16 @@ export default function Dashboard() {
         },
         body: JSON.stringify({}),
       });
-      
+
       if (!response.ok) {
         throw new Error('Failed to fetch discussions');
       }
-      
+
       const report: DailyReport = await response.json();
-      
+
       // Save to localStorage
       saveReport(report);
-      
+
       // Update state
       setReports(prevReports => [report, ...prevReports.filter(r => r.id !== report.id)]);
       setSelectedReport(report);
@@ -74,12 +76,12 @@ export default function Dashboard() {
 
   const exportToJSON = () => {
     if (!selectedReport) return;
-    
+
     const dataStr = JSON.stringify(selectedReport, null, 2);
-    const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
-    
+    const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
+
     const exportFileDefaultName = `open-video-discussions-${format(new Date(selectedReport.date), 'yyyy-MM-dd')}.json`;
-    
+
     const linkElement = document.createElement('a');
     linkElement.setAttribute('href', dataUri);
     linkElement.setAttribute('download', exportFileDefaultName);
@@ -98,10 +100,11 @@ export default function Dashboard() {
   const categories = [...new Set(selectedReport?.discussions.map(d => d.category) || [])];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen container">
+      {/* Full-width header */}
       <header className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center justify-between">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
               <h1 className="text-2xl font-bold text-gray-900">Open Video Discussion Tracker</h1>
               <p className="text-sm text-gray-600 mt-1">Daily insights from creator communities</p>
@@ -126,7 +129,8 @@ export default function Dashboard() {
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      {/* Content area with proper container */}
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         {error && (
           <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-center gap-2 text-red-700">
             <AlertCircle className="w-5 h-5" />
@@ -134,9 +138,9 @@ export default function Dashboard() {
           </div>
         )}
 
-        <div className="grid grid-cols-12 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* Sidebar with date selection */}
-          <div className="col-span-3">
+          <div className="lg:col-span-3">
             <div className="bg-white rounded-lg border border-gray-200 p-4">
               <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
                 <Calendar className="w-4 h-4" />
@@ -147,11 +151,10 @@ export default function Dashboard() {
                   <button
                     key={report.id}
                     onClick={() => setSelectedReport(report)}
-                    className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ${
-                      selectedReport?.id === report.id
-                        ? 'bg-blue-50 text-blue-700 font-medium'
-                        : 'hover:bg-gray-50 text-gray-700'
-                    }`}
+                    className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ${selectedReport?.id === report.id
+                      ? 'bg-blue-50 text-blue-700 font-medium'
+                      : 'hover:bg-gray-50 text-gray-700'
+                      }`}
                   >
                     <div>{format(new Date(report.date), 'MMM dd, yyyy')}</div>
                     <div className="text-xs text-gray-500">
@@ -164,11 +167,11 @@ export default function Dashboard() {
           </div>
 
           {/* Main content area */}
-          <div className="col-span-9">
+          <div className="lg:col-span-9">
             {selectedReport && (
               <>
                 <div className="bg-white rounded-lg border border-gray-200 p-4 mb-6">
-                  <div className="flex items-center justify-between mb-4">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
                     <div>
                       <h2 className="text-lg font-semibold text-gray-900">
                         {format(new Date(selectedReport.date), 'EEEE, MMMM dd, yyyy')}
@@ -179,7 +182,7 @@ export default function Dashboard() {
                     </div>
                     <button
                       onClick={exportToJSON}
-                      className="inline-flex items-center gap-2 px-3 py-1.5 text-sm bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200"
+                      className="inline-flex items-center gap-2 px-3 py-1.5 text-sm bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 self-start sm:self-auto"
                     >
                       <Download className="w-4 h-4" />
                       Export JSON
@@ -187,7 +190,7 @@ export default function Dashboard() {
                   </div>
 
                   {/* Filters */}
-                  <div className="flex items-center gap-4">
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-4">
                     <div className="flex items-center gap-2">
                       <Filter className="w-4 h-4 text-gray-500" />
                       <select
