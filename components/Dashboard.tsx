@@ -106,8 +106,8 @@ export default function Dashboard() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">Open Video Discussion Tracker</h1>
-              <p className="text-sm text-gray-600 mt-1">Daily insights from creator communities</p>
+              <h1 className="text-2xl font-bold text-gray-900">Daily Open Video Relevant Discussion Tracker</h1>
+              <p className="text-sm text-gray-600 mt-1">Tyler Robot Finds Discussions So You Don't Have To</p>
             </div>
             <div className="flex items-center gap-4">
               {lastFetch && (
