@@ -7,8 +7,11 @@ import './globals.css'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Open Video Dashboard - Daily Discussion Tracker',
-  description: 'Track daily discussions about Open Video and creator economy topics',
+  title: 'Tyler OV Daily Discussion Tracker',
+  description: 'Track discussions and news about Open Video and creator economy topic sources to engage with',
+  icons: {
+    icon: '/favicon.ico',
+  },
 }
 
 export default function RootLayout({
@@ -19,11 +22,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <title>Open Video Dashboard - Daily Discussion Tracker</title>
-        <meta name="description" content="Track daily discussions about Open Video and creator economy topics" />
+
       </head>
       <body className={inter.className}>
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen bg-gradient-to-r from-cyan-600 via-cyan-800 to-cyan-500">
           {children}
         </div>
       </body>

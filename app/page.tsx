@@ -4,7 +4,7 @@ import Dashboard from '@/components/Dashboard';
 
 export default function Home() {
   return (
-    <main className="container">
+    <main className="container mx-auto">
       <Dashboard />
     </main>
   );
